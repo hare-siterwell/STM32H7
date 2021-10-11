@@ -1,0 +1,12 @@
+.cache/
+.vscode/
+build/
+MDK-ARM/*
+!MDK-ARM/startup_*.s
+!MDK-ARM/*.uvprojx
+!MDK-ARM/Objects/
+MDK-ARM/Objects/*
+!MDK-ARM/Objects/*.sct
+!MDK-ARM/Objects/*.bin
+!MDK-ARM/Objects/*.hex
+.mxproject
