@@ -6,6 +6,11 @@
 
 #ifndef __TFTLCD_H
 #define __TFTLCD_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "main.h"
 
 extern u16 POINT_COLOR; // 默认画笔颜色
@@ -77,7 +82,11 @@ void LCD_ShowString(u16 x, u16 y, u16 width, u16 height, u8 size,
                     char *p); // 显示字符串
 void LCD_Show_Image(u16 x, u16 y, u16 width, u16 height,
                     const u8 *p);         // 显示图片
-void Display_ALIENTEK_LOGO(u16 x, u16 y); // 显示ALIENTEK LOGO
+void Display_ALIENTEK_LOGO();             // 显示ALIENTEK LOGO
 void LCD_Draw_Point1(u16 x, u16 y, u8 t);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __TFTLCD_H */

@@ -59,10 +59,12 @@ include_directories(
     Drivers/STM32H7xx_HAL_Driver/Inc
     Drivers/CMSIS/Device/ST/STM32H7xx/Include
     Drivers/CMSIS/Include
-    Components/CMSIS-RTOS2/RTX/Include
-    Components/CMSIS-RTOS2/RTX/Source
-    Components/CMSIS-RTOS2/Include
-    Components/CMSIS-RTOS2/RTX/Config
+    Components/uCOS-III/uC-CONFIG
+    Components/uCOS-III/uC-CPU/ARM-Cortex-M/ARMv7-M/ARM
+    Components/uCOS-III/uC-CPU
+    Components/uCOS-III/uC-LIB
+    Components/uCOS-III/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/ARM
+    Components/uCOS-III/uC-OS3/Source
     Components/BSP
     Components/Devices/TFTLCD
     Components/Devices/Stepmotor
@@ -72,10 +74,13 @@ file(GLOB_RECURSE SOURCES
     MDK-ARM/startup_*.s
     Core/Src/*.c
     Drivers/STM32*_Driver/Src/*.c
-    Components/CMSIS-RTOS2/RTX/Source/GCC/irq_armv7m.S
-    Components/CMSIS-RTOS2/RTX/Source/*.c
-    Components/CMSIS-RTOS2/Source/os_systick.c
-    Components/CMSIS-RTOS2/RTX/Config/RTX_Config.c
+    Components/uCOS-III/uC-CPU/ARM-Cortex-M/ARMv7-M/ARM/cpu_a.asm
+    Components/uCOS-III/uC-CPU/ARM-Cortex-M/ARMv7-M/cpu_c.c
+    Components/uCOS-III/uC-CPU/cpu_core.c
+    Components/uCOS-III/uC-LIB/*.c
+    Components/uCOS-III/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/ARM/os_cpu_a.asm
+    Components/uCOS-III/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/os_cpu_c.c
+    Components/uCOS-III/uC-OS3/Source/*.c
     Components/BSP/*.c
     Components/Devices/TFTLCD/tftlcd.c
     Components/Devices/Stepmotor/stepmotor.c

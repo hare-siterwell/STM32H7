@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Components/CMSIS-RTOS2/RTX/Include;../Components/CMSIS-RTOS2/RTX/Source;../Components/CMSIS-RTOS2/Include;../Components/CMSIS-RTOS2/RTX/Config;../Components/BSP;../Components/Devices/TFTLCD;../Components/Devices/Stepmotor</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Components/uCOS-III/uC-CONFIG;../Components/uCOS-III/uC-CPU/ARM-Cortex-M/ARMv7-M/ARM;../Components/uCOS-III/uC-CPU;../Components/uCOS-III/uC-LIB;../Components/uCOS-III/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/ARM;../Components/uCOS-III/uC-OS3/Source;../Components/BSP;../Components/Devices/TFTLCD;../Components/Devices/Stepmotor</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -357,7 +357,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>../Components/CMSIS-RTOS2/RTX/Include;../Components/CMSIS-RTOS2/RTX/Config</IncludePath>
+              <IncludePath></IncludePath>
             </VariousControls>
           </Aads>
           <LDads>
@@ -596,92 +596,172 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>CMSIS-RTOS2</GroupName>
+          <GroupName>uCOS-III/uC-CPU</GroupName>
           <Files>
             <File>
-              <FileName>irq_armv7m.S</FileName>
+              <FileName>cpu_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-CPU\cpu_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpu_c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\cpu_c.c</FilePath>
+            </File>
+            <File>
+              <FileName>cpu_a.asm</FileName>
               <FileType>2</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\GCC\irq_armv7m.S</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-CPU\ARM-Cortex-M\ARMv7-M\ARM\cpu_a.asm</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCOS-III/uC-LIB</GroupName>
+          <Files>
             <File>
-              <FileName>rtx_delay.c</FileName>
+              <FileName>lib_ascii.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_delay.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-LIB\lib_ascii.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_evflags.c</FileName>
+              <FileName>lib_math.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_evflags.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-LIB\lib_math.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_evr.c</FileName>
+              <FileName>lib_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_evr.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-LIB\lib_mem.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_kernel.c</FileName>
+              <FileName>lib_str.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_kernel.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-LIB\lib_str.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCOS-III/uC-OS3/Ports</GroupName>
+          <Files>
             <File>
-              <FileName>rtx_lib.c</FileName>
+              <FileName>os_cpu_c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_lib.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Ports\ARM-Cortex-M\ARMv7-M\os_cpu_c.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_memory.c</FileName>
+              <FileName>os_cpu_a.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Ports\ARM-Cortex-M\ARMv7-M\ARM\os_cpu_a.asm</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCOS-III/uC-OS3/Source</GroupName>
+          <Files>
+            <File>
+              <FileName>os_cfg_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_memory.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_cfg_app.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_mempool.c</FileName>
+              <FileName>os_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_mempool.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_core.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_msgqueue.c</FileName>
+              <FileName>os_dbg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_msgqueue.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_dbg.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_mutex.c</FileName>
+              <FileName>os_flag.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_mutex.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_flag.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_semaphore.c</FileName>
+              <FileName>os_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_semaphore.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_mem.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_system.c</FileName>
+              <FileName>os_msg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_system.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_msg.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_thread.c</FileName>
+              <FileName>os_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_thread.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_mutex.c</FilePath>
             </File>
             <File>
-              <FileName>rtx_timer.c</FileName>
+              <FileName>os_prio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Source\rtx_timer.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_prio.c</FilePath>
             </File>
             <File>
-              <FileName>os_systick.c</FileName>
+              <FileName>os_q.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\Source\os_systick.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_q.c</FilePath>
             </File>
             <File>
-              <FileName>RTX_Config.c</FileName>
+              <FileName>os_sem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Config\RTX_Config.c</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_sem.c</FilePath>
             </File>
             <File>
-              <FileName>RTX_Config.h</FileName>
+              <FileName>os_stat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_stat.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_tick.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_tmr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_tmr.c</FilePath>
+            </File>
+            <File>
+              <FileName>os_var.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Components\uCOS-III\uC-OS3\Source\os_var.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>uCOS-III/uC-CONFIG</GroupName>
+          <Files>
+            <File>
+              <FileName>cpu_cfg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Components\CMSIS-RTOS2\RTX\Config\RTX_Config.h</FilePath>
+              <FilePath>..\Components\uCOS-III\uC-CONFIG\cpu_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>lib_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Components\uCOS-III\uC-CONFIG\lib_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Components\uCOS-III\uC-CONFIG\os_cfg.h</FilePath>
+            </File>
+            <File>
+              <FileName>os_cfg_app.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Components\uCOS-III\uC-CONFIG\os_cfg_app.h</FilePath>
             </File>
           </Files>
         </Group>

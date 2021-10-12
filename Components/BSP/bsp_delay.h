@@ -7,7 +7,7 @@
 #ifndef __BSP_DELAY_H
 #define __BSP_DELAY_H
 
-#include "cmsis_os2.h" // Support CMSIS-RTOS2
+#include "os.h" // Support uCOS-III
 
 /* Define commonly used data type short keywords */
 typedef signed int s32;
@@ -42,6 +42,7 @@ typedef volatile const unsigned int vuc32;
 typedef volatile const unsigned short vuc16;
 typedef volatile const unsigned char vuc8;
 
+void delay_init(void);
 void delay_us(u32 nus);
 void delay_ms(u32 nms);
 

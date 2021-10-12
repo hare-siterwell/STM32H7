@@ -519,9 +519,7 @@ void LCD_Show_Image(u16 x, u16 y, u16 width, u16 height, const u8 *p) {
  * @param x 起点x坐标
  * @param y 起点y坐标
  */
-void Display_ALIENTEK_LOGO(u16 x, u16 y) {
-  LCD_Show_Image(x, y, 240, 82, ALIENTEK_LOGO);
-}
+void Display_ALIENTEK_LOGO() { LCD_Show_Image(0, 26, 240, 82, ALIENTEK_LOGO); }
 
 /**
  * @brief LCD初始化

@@ -342,16 +342,17 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
  * @param USARTx Universal Synchronous Asynchronous Receiver Transmitter
  */
 void USART_RxIdleCallback(USART_TypeDef *USARTx) {
+  OS_ERR err;
   if (USARTx == LPUART1 && __HAL_UART_GET_FLAG(&hlpuart1, UART_FLAG_IDLE)) {
     __HAL_UART_CLEAR_IDLEFLAG(&hlpuart1);
     HAL_UART_AbortReceive(&hlpuart1);
     lur1.len = USART_RXSIZE - __HAL_DMA_GET_COUNTER(&hdma_lpuart1_rx);
-    osSemaphoreRelease(lur1.sta); // Processing data
+    OSSemPost(&lur1.sta, OS_OPT_POST_1, &err); // Processing data
   } else if (USARTx == USART3 && __HAL_UART_GET_FLAG(&huart3, UART_FLAG_IDLE)) {
     __HAL_UART_CLEAR_IDLEFLAG(&huart3);
     HAL_UART_AbortReceive(&huart3);
     ur3.len = USART_RXSIZE - __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
-    osSemaphoreRelease(ur3.sta); // Processing data
+    OSSemPost(&ur3.sta, OS_OPT_POST_1, &err); // Processing data
   }
 }
 

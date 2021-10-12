@@ -13,7 +13,9 @@ extern "C" {
 
 #include "main.h"
 
-void app_main(void *argument);
+extern OS_TCB StartTaskTCB;
+extern CPU_STK StartTaskSTK[512];
+void start_task(void *p_arg);
 
 #ifdef __cplusplus
 }

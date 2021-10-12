@@ -38,7 +38,7 @@ extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN Private defines */
 #define USART_RXSIZE 1024U
 struct UsartRx {
-  osSemaphoreId_t sta;  // Received flag
+  OS_SEM sta;           // Received flag
   u16 len;              // Received length
   u8 buf[USART_RXSIZE]; // Received buffer
 };

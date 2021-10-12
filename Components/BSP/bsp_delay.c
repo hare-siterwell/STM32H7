@@ -3,23 +3,33 @@
  * @brief Manage delays
  */
 
-#include "bsp_delay.h"
+#include "main.h"
 
 /**
- * @brief Provide delays in microseconds
- * @param nus Specifies the delay time length in microseconds
+ * @brief 初始化延时函数
+ * @param SYSCLK 系统时钟频率
  */
-void delay_us(u32 nus) {
-  uc32 timeout = osKernelGetSysTimerFreq() / 1000000U * nus;
-  u32 tcnt, told = osKernelGetSysTimerCount();
-  do {
-    tcnt = osKernelGetSysTimerCount();
-    tcnt = (tcnt > told) ? (tcnt - told) : (UINT32_MAX - told + tcnt);
-  } while (tcnt < timeout);
+void delay_init(void) {
+  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  DWT->CYCCNT = 0;
+  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 }
 
 /**
- * @brief Provide delays in milliseconds
- * @param nms Specifies the delay time length in milliseconds
+ * @brief 延时nus
+ * @param nus 需要延时的us数
  */
-void delay_ms(u32 nms) { osDelay(nms); }
+void delay_us(u32 nus) {
+  u32 startTick = DWT->CYCCNT, delayTicks = nus * (SystemCoreClock / 1000000);
+  while (DWT->CYCCNT - startTick < delayTicks)
+    ;
+}
+
+/**
+ * @brief 延时nms
+ * @param nus 需要延时的ms数
+ */
+void delay_ms(u32 nms) {
+  OS_ERR err;
+  OSTimeDly(nms, OS_OPT_TIME_PERIODIC, &err);
+}
