@@ -6,7 +6,7 @@ set(CMAKE_SYSTEM_PROCESSOR cortex-m7)
 
 # Set paths
 set(SCATTER_PATH ${CMAKE_SOURCE_DIR}/MDK-ARM/Objects/release.sct)
-set(HEX_PATH ${CMAKE_SOURCE_DIR}/MDK-ARM/Objects/release.hex)
+set(BIN_PATH ${CMAKE_SOURCE_DIR}/MDK-ARM/Objects/release.bin)
 set(TOOLCHAIN_PATH C:/Tools/Keil_v5/ARM/ARMCLANG/)
 
 set(CMAKE_C_COMPILER ${TOOLCHAIN_PATH}bin/armclang.exe)
@@ -48,6 +48,8 @@ project(STM32V7 C ASM)
 
 add_definitions(
     -DSTM32H743xx
+    -DUSE_FULL_LL_DRIVER
+    -DHSE_VALUE=12000000
 )
 
 include_directories(
@@ -59,15 +61,15 @@ include_directories(
     Drivers/STM32H7xx_HAL_Driver/Inc
     Drivers/CMSIS/Device/ST/STM32H7xx/Include
     Drivers/CMSIS/Include
-    Components/uCOS-III/uC-CONFIG
     Components/uCOS-III/uC-CPU/ARM-Cortex-M/ARMv7-M/ARM
     Components/uCOS-III/uC-CPU
     Components/uCOS-III/uC-LIB
     Components/uCOS-III/uC-OS3/Ports/ARM-Cortex-M/ARMv7-M/ARM
     Components/uCOS-III/uC-OS3/Source
+    Components/uCOS-III/uC-CONFIG
     Components/BSP
     Components/Devices/TFTLCD
-    Components/Devices/Stepmotor
+    Components/Devices/STEP
 )
 
 file(GLOB_RECURSE SOURCES
@@ -83,12 +85,12 @@ file(GLOB_RECURSE SOURCES
     Components/uCOS-III/uC-OS3/Source/*.c
     Components/BSP/*.c
     Components/Devices/TFTLCD/tftlcd.c
-    Components/Devices/Stepmotor/stepmotor.c
+    Components/Devices/STEP/step.c
 )
 
 add_executable(release ${SOURCES})
 
 # Generate binary file
 add_custom_command(TARGET release POST_BUILD
-    COMMAND ${TOOLCHAIN_PATH}bin/fromelf.exe --i32 -o ${HEX_PATH} release.elf
+    COMMAND ${TOOLCHAIN_PATH}bin/fromelf.exe --bin -o ${BIN_PATH} release.elf
 )

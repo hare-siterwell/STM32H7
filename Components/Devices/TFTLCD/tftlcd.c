@@ -4,11 +4,11 @@
  */
 
 #include "tftlcd.h"
+#include "bsp_spi.h"
 #include "font.h"
 #include "image.h"
-#include "spi.h"
 
-#define HSPI &hspi6 // LCD底层SPI
+#define HSPI SPI6 // LCD底层SPI
 
 // LCD缓存大小设置，修改此值时请注意!!
 // 修改这两个值时可能会影响 LCD_Clear/LCD_Fill/LCD_DrawLine
@@ -25,7 +25,7 @@ u16 BACK_COLOR = BLACK; // 背景颜色
  * @param size 发送数据大小
  */
 static void LCD_SPI_Send(u8 *data, u16 size) {
-  HAL_SPI_Transmit(HSPI, data, size, 1000);
+  SPI_TransmitReceive(HSPI, data, NULL, size);
 }
 
 /**

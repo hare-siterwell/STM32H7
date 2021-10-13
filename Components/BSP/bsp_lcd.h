@@ -1,11 +1,11 @@
 /**
- * @file bsp_delay.h
+ * @file bsp_lcd.h
  * @brief This file contains all the function prototypes for
- *        the bsp_delay.c file
+ *        the bsp_lcd.c file
  */
 
-#ifndef __BSP_DELAY_H
-#define __BSP_DELAY_H
+#ifndef __BSP_LCD_H
+#define __BSP_LCD_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,10 +13,10 @@ extern "C" {
 
 #include "bsp_app.h"
 
-void DWT_Init(void);
+void lcd_task(void *p_arg);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BSP_DELAY_H */
+#endif /* __BSP_LCD_H */

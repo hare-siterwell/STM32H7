@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-#include "main.h"
+#include "bsp_app.h"
 
 extern u16 POINT_COLOR; // 默认画笔颜色
 extern u16 BACK_COLOR;  // 默认背景颜色
@@ -50,17 +50,12 @@ enum Colors {
   LBBLUE = 0X2B12      // 浅棕蓝色(选择条目的反色)
 };
 
-#define LCD_PWR_SET                                                            \
-  HAL_GPIO_WritePin(LCD_PWR_GPIO_Port, LCD_PWR_Pin, GPIO_PIN_SET)
-#define LCD_PWR_RESET                                                          \
-  HAL_GPIO_WritePin(LCD_PWR_GPIO_Port, LCD_PWR_Pin, GPIO_PIN_RESET)
-#define LCD_RST_SET                                                            \
-  HAL_GPIO_WritePin(LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_SET)
-#define LCD_RST_RESET                                                          \
-  HAL_GPIO_WritePin(LCD_RST_GPIO_Port, LCD_RST_Pin, GPIO_PIN_RESET)
-#define LCD_DC_SET HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_SET)
-#define LCD_DC_RESET                                                           \
-  HAL_GPIO_WritePin(LCD_DC_GPIO_Port, LCD_DC_Pin, GPIO_PIN_RESET)
+#define LCD_PWR_SET LL_GPIO_SetOutputPin(LCD_PWR_GPIO_Port, LCD_PWR_Pin)
+#define LCD_PWR_RESET LL_GPIO_ResetOutputPin(LCD_PWR_GPIO_Port, LCD_PWR_Pin)
+#define LCD_RST_SET LL_GPIO_SetOutputPin(LCD_RST_GPIO_Port, LCD_RST_Pin)
+#define LCD_RST_RESET LL_GPIO_ResetOutputPin(LCD_RST_GPIO_Port, LCD_RST_Pin)
+#define LCD_DC_SET LL_GPIO_SetOutputPin(LCD_DC_GPIO_Port, LCD_DC_Pin)
+#define LCD_DC_RESET LL_GPIO_ResetOutputPin(LCD_DC_GPIO_Port, LCD_DC_Pin)
 
 void LCD_Init(void);                   // 初始化
 void LCD_DisplayOn(void);              // 开显示
@@ -81,8 +76,8 @@ void LCD_ShowxNum(u16 x, u16 y, u32 num, u8 len, u8 size, u8 mode); // 显示数
 void LCD_ShowString(u16 x, u16 y, u16 width, u16 height, u8 size,
                     char *p); // 显示字符串
 void LCD_Show_Image(u16 x, u16 y, u16 width, u16 height,
-                    const u8 *p);         // 显示图片
-void Display_ALIENTEK_LOGO();             // 显示ALIENTEK LOGO
+                    const u8 *p); // 显示图片
+void Display_ALIENTEK_LOGO();     // 显示ALIENTEK LOGO
 void LCD_Draw_Point1(u16 x, u16 y, u8 t);
 
 #ifdef __cplusplus

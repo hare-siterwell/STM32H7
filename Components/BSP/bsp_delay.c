@@ -3,7 +3,7 @@
  * @brief Manage delays
  */
 
-#include "main.h"
+#include "bsp_delay.h"
 
 /**
  * @brief Initialize DWT
@@ -35,4 +35,5 @@ void delay_us(u32 nus) {
 void delay_ms(u32 nms) {
   OS_ERR err;
   OSTimeDly(nms, OS_OPT_TIME_PERIODIC, &err);
+	(void )&err;
 }
