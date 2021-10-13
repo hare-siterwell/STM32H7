@@ -13,8 +13,6 @@ extern "C" {
 
 #include "main.h"
 
-extern OS_TCB StartTaskTCB;
-extern CPU_STK StartTaskSTK[512];
 void start_task(void *p_arg);
 
 #ifdef __cplusplus

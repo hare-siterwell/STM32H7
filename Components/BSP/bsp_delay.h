@@ -42,7 +42,7 @@ typedef volatile const unsigned int vuc32;
 typedef volatile const unsigned short vuc16;
 typedef volatile const unsigned char vuc8;
 
-void delay_init(void);
+void DWT_Init(void);
 void delay_us(u32 nus);
 void delay_ms(u32 nms);
 

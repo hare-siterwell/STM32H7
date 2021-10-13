@@ -6,18 +6,21 @@
 #include "main.h"
 
 /**
- * @brief 初始化延时函数
- * @param SYSCLK 系统时钟频率
+ * @brief Initialize DWT
+ * @note It may need to enable access to DWT registers on Cortex-M7
+ *       DWT->LAR = 0xC5ACCE55
  */
-void delay_init(void) {
-  CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-  DWT->CYCCNT = 0;
-  DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+void DWT_Init(void) {
+  if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)) {
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    DWT->CYCCNT = 0;
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+  }
 }
 
 /**
- * @brief 延时nus
- * @param nus 需要延时的us数
+ * @brief Provide delays in microseconds
+ * @param nus Specifies the delay time length in microseconds
  */
 void delay_us(u32 nus) {
   u32 startTick = DWT->CYCCNT, delayTicks = nus * (SystemCoreClock / 1000000);
@@ -26,8 +29,8 @@ void delay_us(u32 nus) {
 }
 
 /**
- * @brief 延时nms
- * @param nus 需要延时的ms数
+ * @brief Provide delays in milliseconds
+ * @param nms Specifies the delay time length in milliseconds
  */
 void delay_ms(u32 nms) {
   OS_ERR err;

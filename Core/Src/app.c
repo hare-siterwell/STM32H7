@@ -8,8 +8,6 @@
 #include "tftlcd.h"
 #include "usart.h"
 
-OS_TCB StartTaskTCB;
-CPU_STK StartTaskSTK[512];
 static OS_TCB Task1TCB;
 static CPU_STK Task1Stk[512];
 static void lpuart1_task(void *p_arg);
@@ -29,19 +27,22 @@ static void led_task(void *p_arg);
 void start_task(void *p_arg) {
   OS_ERR err;
 
-  OSTaskCreate(&Task1TCB, "lpuart1 task", lpuart1_task, 0, 5, &Task1Stk[0],
+#if OS_CFG_SCHED_ROUND_ROBIN_EN
+  OSSchedRoundRobinCfg(DEF_ENABLED, 5, &err);
+#endif
+
+  OSTaskCreate(&Task1TCB, "lpuart1 task", lpuart1_task, 0, 5, Task1Stk,
                512 / 10, 512, 0, 0, 0,
                (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
 
-  OSTaskCreate(&Task2TCB, "usart3 task", usart3_task, 0, 4, &Task2Stk[0],
-               512 / 10, 512, 0, 0, 0,
-               (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
-
-  OSTaskCreate(&Task3TCB, "lcd task", lcd_task, 0, 5, &Task3Stk[0], 512 / 10,
+  OSTaskCreate(&Task2TCB, "usart3 task", usart3_task, 0, 5, Task2Stk, 512 / 10,
                512, 0, 0, 0, (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
 
-  OSTaskCreate(&Task4TCB, "led task", led_task, 0, 5, &Task4Stk[0], 512 / 10,
-               512, 0, 0, 0, (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
+  OSTaskCreate(&Task3TCB, "lcd task", lcd_task, 0, 5, Task3Stk, 512 / 10, 512,
+               0, 0, 0, (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
+
+  OSTaskCreate(&Task4TCB, "led task", led_task, 0, 5, Task4Stk, 512 / 10, 512,
+               0, 0, 0, (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
 }
 
 /**
@@ -159,7 +160,7 @@ static void led_task(void *p_arg) {
     HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_SET);
     delay_ms(500);
     HAL_GPIO_WritePin(BLUE_GPIO_Port, BLUE_Pin, GPIO_PIN_RESET);
-    delay_ms(500);
+    delay_us(500000);
     HAL_GPIO_WritePin(GREEN_GPIO_Port, GREEN_Pin, GPIO_PIN_SET);
     delay_ms(500);
     HAL_GPIO_WritePin(RED_GPIO_Port, RED_Pin, GPIO_PIN_RESET);

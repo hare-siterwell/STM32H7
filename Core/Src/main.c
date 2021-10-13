@@ -48,7 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+static OS_TCB StartTaskTCB;
+static CPU_STK StartTaskSTK[512];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,7 +97,7 @@ int main(void) {
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  DWT_Init();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -107,10 +108,9 @@ int main(void) {
   MX_USART3_UART_Init();
   MX_SPI6_Init();
   MX_TIM3_Init();
-  delay_init();
   /* USER CODE BEGIN 2 */
   OSInit(&err);
-  OSTaskCreate(&StartTaskTCB, "start task", start_task, 0, 2, &StartTaskSTK[0],
+  OSTaskCreate(&StartTaskTCB, "start task", start_task, 0, 2, StartTaskSTK,
                512 / 10, 512, 0, 0, 0,
                (OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR), &err);
   OSStart(&err);
@@ -180,7 +180,14 @@ void SystemClock_Config(void) {
 }
 
 /* USER CODE BEGIN 4 */
-
+/**
+ * @brief Provides a tick value in millisecond
+ */
+u32 HAL_GetTick(void) {
+  if (CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)
+    return DWT->CYCCNT / SystemCoreClock * 1000;
+  return uwTick;
+}
 /* USER CODE END 4 */
 
 /* MPU Configuration */
