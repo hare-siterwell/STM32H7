@@ -27,9 +27,9 @@ static void led_task(void *p_arg);
 void start_task(void *p_arg) {
   OS_ERR err;
 
-#if OS_CFG_SCHED_ROUND_ROBIN_EN
-  OSSchedRoundRobinCfg(DEF_ENABLED, 5, &err);
-#endif
+  // #if OS_CFG_SCHED_ROUND_ROBIN_EN
+  //   OSSchedRoundRobinCfg(DEF_ENABLED, 5, &err);
+  // #endif
 
   OSTaskCreate(&Task1TCB, "lpuart1 task", lpuart1_task, 0, 5, Task1Stk,
                512 / 10, 512, 0, 0, 0,
@@ -113,7 +113,8 @@ static void usart3_task(void *p_arg) {
   while (1) {
     OSSemPend(&ur3.sta, 0, OS_OPT_PEND_BLOCKING, 0, &err);
 
-    verify_buf(ur3.buf, kFormatString);
+    printf("%s\r\nData Length: %d\r\n", ur3.buf, ur3.len);
+    // verify_buf(ur3.buf, kFormatString);
 
     USART_ReEnable(USART3);
     delay_ms(1);

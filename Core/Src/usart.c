@@ -160,7 +160,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     */
     GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF3_LPUART;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -232,7 +232,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     */
     GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -347,7 +347,11 @@ void USART_RxIdleCallback(USART_TypeDef *USARTx) {
     __HAL_UART_CLEAR_IDLEFLAG(&hlpuart1);
     HAL_UART_AbortReceive(&hlpuart1);
     lur1.len = USART_RXSIZE - __HAL_DMA_GET_COUNTER(&hdma_lpuart1_rx);
-    OSSemPost(&lur1.sta, OS_OPT_POST_1, &err); // Processing data
+    if (lur1.len) {
+      OSSemPost(&lur1.sta, OS_OPT_POST_1, &err); // Processing data
+    } else {
+      USART_ReEnable(LPUART1);
+    }
   } else if (USARTx == USART3 && __HAL_UART_GET_FLAG(&huart3, UART_FLAG_IDLE)) {
     __HAL_UART_CLEAR_IDLEFLAG(&huart3);
     HAL_UART_AbortReceive(&huart3);
