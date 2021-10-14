@@ -40,11 +40,19 @@ static void verify_buf(uc8 *kBuf, uc8 *kFormatString) {
 void lpuart1_task(void *p_arg) {
   OS_ERR err;
   OSSemCreate(&lur1.sta, "lur1 sta", 0, &err);
+  uc8 kFormatString[] = "\
+  {\
+    \"step_move\": %d,\
+    \"step_spmax\": %hu,\
+    \"step_accel\": %hu,\
+    \"divnum\": %hu,\
+    \"motor_id\": %hu\
+  }";
   printf("TaskLpuart1 running!\r\n");
   while (1) {
     OSSemPend(&lur1.sta, 0, OS_OPT_PEND_BLOCKING, 0, &err);
 
-    printf("%s\r\nData Length: %d\r\n", lur1.buf, lur1.len);
+    verify_buf(lur1.buf, kFormatString);
 
     USART_ReEnable(LPUART1);
   }

@@ -234,6 +234,7 @@ void DMA1_Stream1_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
+  LL_TIM_ClearFlag_UPDATE(TIM6);
   motor_spta_algorithm(&motor1);
   /* USER CODE END TIM3_IRQn 0 */
   /* USER CODE BEGIN TIM3_IRQn 1 */
