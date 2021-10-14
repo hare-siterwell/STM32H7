@@ -69,7 +69,7 @@ int motor_move(struct Motor *motor, u16 divnum, s32 step_move, u16 step_spmax,
                u16 step_accel) {
   if (!step_move || !step_spmax || !step_accel) {
     motor->state = stopped_state;
-    // STEP_TIM(0);
+    STEP_TIM(0);
     return 1;
   }
 
@@ -94,7 +94,7 @@ int motor_move(struct Motor *motor, u16 divnum, s32 step_move, u16 step_spmax,
   motor->step_speed = 0;
 
   motor->state = acceleration_state;
-  // STEP_TIM(1);
+  STEP_TIM(1);
   return 0;
 }
 
@@ -164,7 +164,7 @@ void motor_spta_algorithm(struct Motor *motor) {
 
     if (motor->step_count >= motor->step_move) {
       motor->state = stopped_state;
-      // STEP_TIM(0);
+      STEP_TIM(0);
     }
     break;
 
