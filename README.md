@@ -1,9 +1,6 @@
 # STM32H7_Demo
 STM32H7 project demo.
 
-# Notice
-STM32CubeMX 覆盖代码会清空 Keil-> Options for Target...-> Asm-> Include Paths 中的内容.
-
 # Getting Started
 ## .vscode/launch.json (optional)
 ```

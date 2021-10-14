@@ -28,6 +28,7 @@ void usart3_task(void *p_arg);
 void USART_Enable(void);
 void USART_RxIdleCallback(USART_TypeDef *USARTx);
 void USART_ReEnable(USART_TypeDef *USARTx);
+void USART_Send(USART_TypeDef *USARTx, u8 *pData, u32 Size);
 
 #ifdef __cplusplus
 }

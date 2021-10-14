@@ -22,7 +22,6 @@ void motor_arg_init(void) {
   motor1.ms2_gpio = MOTOR1_MS2_Pin;
   motor1.ms3_gpio_array = MOTOR1_MS3_GPIO_Port;
   motor1.ms3_gpio = MOTOR1_MS3_Pin;
-  motor1.tim = TIM3;
 }
 
 /**
@@ -53,12 +52,9 @@ void motor_divnum(struct Motor *motor, u16 divnum) {
     motor->divnum = 1;
     break;
   }
-  ms1 ? LL_GPIO_SetOutputPin(motor->ms1_gpio_array, motor->ms1_gpio)
-      : LL_GPIO_ResetOutputPin(motor->ms1_gpio_array, motor->ms1_gpio);
-  ms2 ? LL_GPIO_SetOutputPin(motor->ms2_gpio_array, motor->ms2_gpio)
-      : LL_GPIO_ResetOutputPin(motor->ms2_gpio_array, motor->ms2_gpio);
-  ms3 ? LL_GPIO_SetOutputPin(motor->ms3_gpio_array, motor->ms3_gpio)
-      : LL_GPIO_ResetOutputPin(motor->ms3_gpio_array, motor->ms3_gpio);
+  MS1_OUTPUT(ms1);
+  MS2_OUTPUT(ms2);
+  MS3_OUTPUT(ms3);
 }
 
 /**
@@ -73,15 +69,15 @@ int motor_move(struct Motor *motor, u16 divnum, s32 step_move, u16 step_spmax,
                u16 step_accel) {
   if (!step_move || !step_spmax || !step_accel) {
     motor->state = stopped_state;
-    LL_TIM_EnableIT_UPDATE(motor1.tim);
+    STEP_TIM(0);
     return 1;
   }
 
   if (step_move < 0) { // 步数为负,反转
-    LL_GPIO_ResetOutputPin(motor->dir_gpio_array, motor->dir_gpio);
+    DIR_OUTPUT(0);
     step_move = -step_move;
   } else {
-    LL_GPIO_SetOutputPin(motor->dir_gpio_array, motor->dir_gpio);
+    DIR_OUTPUT(1);
   }
 
   motor_divnum(motor, divnum);
@@ -98,7 +94,7 @@ int motor_move(struct Motor *motor, u16 divnum, s32 step_move, u16 step_spmax,
   motor->step_speed = 0;
 
   motor->state = acceleration_state;
-  LL_TIM_DisableIT_UPDATE(motor1.tim);
+  STEP_TIM(1);
   return 0;
 }
 
@@ -111,7 +107,7 @@ void motor_spta_algorithm(struct Motor *motor) {
     return;
 
   // 拉低脉冲信号
-  LL_GPIO_ResetOutputPin(motor->step_gpio_array, motor->step_gpio);
+  STEP_OUTPUT(0);
 
   motor->step_frac += motor->step_speed; // 叠加步数
   u32 carry = motor->step_frac / FRAC_MAX;
@@ -119,7 +115,7 @@ void motor_spta_algorithm(struct Motor *motor) {
     motor->step_frac -= FRAC_MAX;
     motor->step_count++;
     // 拉高脉冲信号产生一个步进脉冲
-    LL_GPIO_SetOutputPin(motor->step_gpio_array, motor->step_gpio);
+    STEP_OUTPUT(1);
   }
 
   // 根据电机的状态进行工作
@@ -168,7 +164,7 @@ void motor_spta_algorithm(struct Motor *motor) {
 
     if (motor->step_count >= motor->step_move) {
       motor->state = stopped_state;
-      LL_TIM_DisableIT_UPDATE(motor1.tim);
+      STEP_TIM(0);
     }
     break;
 

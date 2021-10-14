@@ -42,13 +42,11 @@ void lpuart1_task(void *p_arg) {
   OSSemCreate(&lur1.sta, "lur1 sta", 0, &err);
   printf("TaskLpuart1 running!\r\n");
   while (1) {
-    delay_ms(1);
     OSSemPend(&lur1.sta, 0, OS_OPT_PEND_BLOCKING, 0, &err);
 
     printf("%s\r\nData Length: %d\r\n", lur1.buf, lur1.len);
 
     USART_ReEnable(LPUART1);
-    delay_ms(1);
   }
 }
 
@@ -68,13 +66,13 @@ void usart3_task(void *p_arg) {
   motor_arg_init();
   OSSemCreate(&ur3.sta, "ur3 sta", 0, &err);
   printf("TaskUsart3 running!\r\n");
+
   while (1) {
     OSSemPend(&ur3.sta, 0, OS_OPT_PEND_BLOCKING, 0, &err);
 
     verify_buf(ur3.buf, kFormatString);
 
     USART_ReEnable(USART3);
-    delay_ms(1);
   }
 }
 
@@ -97,13 +95,18 @@ struct UsartRx ur3;
 void USART_Enable(void) {
   LL_BDMA_SetPeriphAddress(
       BDMA, LL_BDMA_CHANNEL_0,
-      LL_USART_DMA_GetRegAddr(LPUART1, LL_USART_DMA_REG_DATA_RECEIVE));
+      LL_LPUART_DMA_GetRegAddr(LPUART1, LL_LPUART_DMA_REG_DATA_RECEIVE));
   LL_BDMA_SetMemoryAddress(BDMA, LL_BDMA_CHANNEL_0, (u32)lur1.buf);
   LL_BDMA_SetDataLength(BDMA, LL_BDMA_CHANNEL_0, USART_RXSIZE);
-  LL_BDMA_EnableIT_TC(BDMA, LL_BDMA_CHANNEL_0);
   LL_BDMA_EnableChannel(BDMA, LL_BDMA_CHANNEL_0);
   LL_LPUART_EnableDMAReq_RX(LPUART1);
+  LL_LPUART_ClearFlag_IDLE(LPUART1);
   LL_LPUART_EnableIT_IDLE(LPUART1);
+
+  LL_BDMA_SetPeriphAddress(
+      BDMA, LL_BDMA_CHANNEL_1,
+      LL_LPUART_DMA_GetRegAddr(LPUART1, LL_LPUART_DMA_REG_DATA_TRANSMIT));
+  LL_LPUART_EnableDMAReq_TX(LPUART1);
 }
 
 /**
@@ -113,6 +116,7 @@ void USART_Enable(void) {
 void USART_RxIdleCallback(USART_TypeDef *USARTx) {
   OS_ERR err;
   if (USARTx == LPUART1 && LL_LPUART_IsActiveFlag_IDLE(LPUART1)) {
+    LL_LPUART_ClearFlag_IDLE(LPUART1);
     LL_BDMA_DisableChannel(BDMA, LL_BDMA_CHANNEL_0);
     lur1.len = USART_RXSIZE - LL_BDMA_GetDataLength(BDMA, LL_BDMA_CHANNEL_0);
     if (lur1.len) {
@@ -121,6 +125,7 @@ void USART_RxIdleCallback(USART_TypeDef *USARTx) {
       USART_ReEnable(LPUART1);
     }
   } else if (USARTx == USART3 && LL_USART_IsActiveFlag_IDLE(USART3)) {
+    LL_USART_ClearFlag_IDLE(USART3);
     LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_0);
     ur3.len = USART_RXSIZE - LL_DMA_GetDataLength(DMA1, LL_DMA_STREAM_0);
     if (ur3.len) {
@@ -141,12 +146,26 @@ void USART_ReEnable(USART_TypeDef *USARTx) {
     lur1.len = 0;
     LL_BDMA_SetDataLength(BDMA, LL_BDMA_CHANNEL_0, USART_RXSIZE);
     LL_BDMA_EnableChannel(BDMA, LL_BDMA_CHANNEL_0);
-    LL_LPUART_ClearFlag_IDLE(LPUART1);
   } else if (USARTx == USART3) {
     memset(ur3.buf, 0, ur3.len);
     ur3.len = 0;
     LL_DMA_SetDataLength(DMA1, LL_DMA_STREAM_0, USART_RXSIZE);
     LL_DMA_EnableStream(DMA1, LL_DMA_STREAM_0);
-    LL_USART_ClearFlag_IDLE(USART3);
+  }
+}
+
+/**
+ * @brief Sends an amount of data in DMA mode
+ * @note Pay attention to bdma access address permissions
+ * @param USARTx Universal Synchronous Asynchronous Receiver Transmitter
+ * @param pData Pointer to data buffer
+ * @param Size Amount of data elements
+ */
+void USART_Send(USART_TypeDef *USARTx, u8 *pData, u32 Size) {
+  if (USARTx == LPUART1) {
+    LL_BDMA_DisableChannel(BDMA, LL_BDMA_CHANNEL_1);
+    LL_BDMA_SetMemoryAddress(BDMA, LL_BDMA_CHANNEL_1, (u32)pData);
+    LL_BDMA_SetDataLength(BDMA, LL_BDMA_CHANNEL_1, Size);
+    LL_BDMA_EnableChannel(BDMA, LL_BDMA_CHANNEL_1);
   }
 }

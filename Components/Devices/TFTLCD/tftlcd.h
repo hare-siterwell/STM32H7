@@ -50,12 +50,15 @@ enum Colors {
   LBBLUE = 0X2B12      // 浅棕蓝色(选择条目的反色)
 };
 
-#define LCD_PWR_SET LL_GPIO_SetOutputPin(LCD_PWR_GPIO_Port, LCD_PWR_Pin)
-#define LCD_PWR_RESET LL_GPIO_ResetOutputPin(LCD_PWR_GPIO_Port, LCD_PWR_Pin)
-#define LCD_RST_SET LL_GPIO_SetOutputPin(LCD_RST_GPIO_Port, LCD_RST_Pin)
-#define LCD_RST_RESET LL_GPIO_ResetOutputPin(LCD_RST_GPIO_Port, LCD_RST_Pin)
-#define LCD_DC_SET LL_GPIO_SetOutputPin(LCD_DC_GPIO_Port, LCD_DC_Pin)
-#define LCD_DC_RESET LL_GPIO_ResetOutputPin(LCD_DC_GPIO_Port, LCD_DC_Pin)
+#define LCD_PWR(n)                                                             \
+  n ? LL_GPIO_SetOutputPin(LCD_PWR_GPIO_Port, LCD_PWR_Pin)                     \
+    : LL_GPIO_ResetOutputPin(LCD_PWR_GPIO_Port, LCD_PWR_Pin)
+#define LCD_RST(n)                                                             \
+  n ? LL_GPIO_SetOutputPin(LCD_RST_GPIO_Port, LCD_RST_Pin)                     \
+    : LL_GPIO_ResetOutputPin(LCD_RST_GPIO_Port, LCD_RST_Pin)
+#define LCD_DC(n)                                                              \
+  n ? LL_GPIO_SetOutputPin(LCD_DC_GPIO_Port, LCD_DC_Pin)                       \
+    : LL_GPIO_ResetOutputPin(LCD_DC_GPIO_Port, LCD_DC_Pin)
 
 void LCD_Init(void);                   // 初始化
 void LCD_DisplayOn(void);              // 开显示

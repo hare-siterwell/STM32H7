@@ -35,5 +35,4 @@ void delay_us(u32 nus) {
 void delay_ms(u32 nms) {
   OS_ERR err;
   OSTimeDly(nms, OS_OPT_TIME_PERIODIC, &err);
-	(void )&err;
 }

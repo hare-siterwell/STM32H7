@@ -8,7 +8,7 @@
 #include "font.h"
 #include "image.h"
 
-#define HSPI SPI6 // LCD底层SPI
+#define LCD_SPI SPI6 // LCD底层SPI
 
 // LCD缓存大小设置，修改此值时请注意!!
 // 修改这两个值时可能会影响 LCD_Clear/LCD_Fill/LCD_DrawLine
@@ -25,7 +25,7 @@ u16 BACK_COLOR = BLACK; // 背景颜色
  * @param size 发送数据大小
  */
 static void LCD_SPI_Send(u8 *data, u16 size) {
-  SPI_TransmitReceive(HSPI, data, NULL, size);
+  SPI_TransmitReceive(LCD_SPI, data, NULL, size);
 }
 
 /**
@@ -33,7 +33,7 @@ static void LCD_SPI_Send(u8 *data, u16 size) {
  * @param cmd 需要发送的命令
  */
 static void LCD_Write_Cmd(u8 cmd) {
-  LCD_DC_RESET;
+  LCD_DC(0);
   LCD_SPI_Send(&cmd, 1);
 }
 
@@ -42,7 +42,7 @@ static void LCD_Write_Cmd(u8 cmd) {
  * @param cmd 需要发送的数据
  */
 static void LCD_Write_Data(u8 data) {
-  LCD_DC_SET;
+  LCD_DC(1);
   LCD_SPI_Send(&data, 1);
 }
 
@@ -53,7 +53,7 @@ static void LCD_Write_Data(u8 data) {
 void LCD_Write_HalfWord(const u16 da) {
   u8 data[2] = {da >> 8, da};
 
-  LCD_DC_SET;
+  LCD_DC(1);
   LCD_SPI_Send(data, 2);
 }
 
@@ -103,12 +103,12 @@ void LCD_Address_Set(u16 x1, u16 y1, u16 x2, u16 y2) {
 /**
  * @brief 打开LCD显示
  */
-void LCD_DisplayOn(void) { LCD_PWR_RESET; }
+void LCD_DisplayOn(void) { LCD_PWR(0); }
 
 /**
  * @brief 关闭LCD显示
  */
-void LCD_DisplayOff(void) { LCD_PWR_SET; }
+void LCD_DisplayOff(void) { LCD_PWR(1); }
 
 /**
  * @brief 以一种颜色清空LCD屏
@@ -141,7 +141,7 @@ void LCD_Fill(u16 x_start, u16 y_start, u16 x_end, u16 y_end, u16 color) {
       lcd_buf[2 * i + 1] = color;
     }
 
-    LCD_DC_SET;
+    LCD_DC(1);
     LCD_SPI_Send(lcd_buf, size);
 
     if (size_remain == 0) {
@@ -210,7 +210,7 @@ void LCD_DrawLine(u16 x1, u16 y1, u16 x2, u16 y2) {
       lcd_buf[2 * i + 1] = POINT_COLOR;
     }
 
-    LCD_DC_SET;
+    LCD_DC(1);
     LCD_SPI_Send(lcd_buf, (x2 - x1) * 2);
     return;
   }
@@ -510,7 +510,7 @@ void LCD_Show_Image(u16 x, u16 y, u16 width, u16 height, const u8 *p) {
     return;
 
   LCD_Address_Set(x, y, x + width - 1, y + height - 1);
-  LCD_DC_SET;
+  LCD_DC(1);
   LCD_SPI_Send((u8 *)p, width * height * 2);
 }
 
@@ -525,11 +525,11 @@ void Display_ALIENTEK_LOGO() { LCD_Show_Image(0, 26, 240, 82, ALIENTEK_LOGO); }
  * @brief LCD初始化
  */
 void LCD_Init(void) {
-  LCD_PWR_RESET;
+  LCD_PWR(0);
   delay_ms(120);
-  LCD_RST_RESET;
+  LCD_RST(0);
   delay_ms(120);
-  LCD_RST_SET;
+  LCD_RST(1);
 
   delay_ms(120);
   /* Sleep Out */
@@ -636,5 +636,5 @@ void LCD_Init(void) {
   LCD_Address_Set(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1);
 
   /* 打开显示 */
-  LCD_PWR_SET;
+  LCD_PWR(1);
 }
