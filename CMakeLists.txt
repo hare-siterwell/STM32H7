@@ -47,8 +47,8 @@ enable_language(ASM)
 project(STM32V7 C ASM)
 
 add_definitions(
-    -DSTM32H743xx
     -DUSE_FULL_LL_DRIVER
+    -DSTM32H743xx
     -DHSE_VALUE=12000000
 )
 

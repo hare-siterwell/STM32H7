@@ -28,9 +28,9 @@ void app_task(void *p_arg) {
   USART_Enable();
   SPI_Enable();
 
-  //#if OS_CFG_SCHED_ROUND_ROBIN_EN
-  //  OSSchedRoundRobinCfg(DEF_ENABLED, 5, &err);
-  //#endif
+#if OS_CFG_SCHED_ROUND_ROBIN_EN
+  OSSchedRoundRobinCfg(DEF_ENABLED, 0, &err);
+#endif
 
   OSTaskCreate(&Task1TCB, "Task1", lpuart1_task, 0, 5, Task1Stk, 512 / 10, 512,
                0, 0, 0, OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR, &err);
@@ -41,6 +41,6 @@ void app_task(void *p_arg) {
   OSTaskCreate(&Task3TCB, "Task3", lcd_task, 0, 7, Task3Stk, 512 / 10, 512, 0,
                0, 0, OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR, &err);
 
-  OSTaskCreate(&Task4TCB, "Task4", led_task, 0, 8, Task4Stk, 512 / 10, 512, 0,
+  OSTaskCreate(&Task4TCB, "Task4", led_task, 0, 7, Task4Stk, 512 / 10, 512, 0,
                0, 0, OS_OPT_TASK_STK_CHK | OS_OPT_TASK_STK_CLR, &err);
 }
