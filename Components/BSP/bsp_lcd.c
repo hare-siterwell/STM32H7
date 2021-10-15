@@ -31,3 +31,17 @@ void lcd_task(void *p_arg) {
     delay_ms(1000);
   }
 }
+
+/**
+ * @brief SPI Transmit and Receive
+ * @param SPIx SPI
+ * @param TxData Transmit Data
+ * @param RxData Receive Data
+ * @param Size Data size
+ */
+void SPI_TransmitReceive(SPI_TypeDef *SPIx, u8 *TxData, u8 *RxData, u16 Size) {
+  if (SPIx == SPI6) {
+    extern SPI_HandleTypeDef hspi6;
+    HAL_SPI_Transmit(&hspi6, TxData, Size, 1000);
+  }
+}

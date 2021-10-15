@@ -4,7 +4,7 @@
  */
 
 #include "tftlcd.h"
-#include "bsp_spi.h"
+#include "bsp_lcd.h"
 #include "font.h"
 #include "image.h"
 

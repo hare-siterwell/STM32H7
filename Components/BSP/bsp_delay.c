@@ -23,8 +23,8 @@ void DWT_Init(void) {
  * @param nus Specifies the delay time length in microseconds
  */
 void delay_us(u32 nus) {
-  u32 startTick = DWT->CYCCNT, delayTicks = nus * (SystemCoreClock / 1000000);
-  while (DWT->CYCCNT - startTick < delayTicks)
+  uc32 startTick = DWT->CYCCNT, delayTicks = nus * (SystemCoreClock / 1000000);
+  while ((u32)(DWT->CYCCNT - startTick) < delayTicks)
     ;
 }
 

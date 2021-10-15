@@ -6,7 +6,6 @@
 #include "bsp_delay.h"
 #include "bsp_lcd.h"
 #include "bsp_led.h"
-#include "bsp_spi.h"
 #include "bsp_usart.h"
 #include "step.h"
 
@@ -27,7 +26,6 @@ void app_task(void *p_arg) {
 
   DWT_Init();
   USART_Enable();
-  SPI_Enable();
   LL_TIM_EnableIT_UPDATE(TIM3);
   LL_TIM_EnableCounter(TIM3);
   motor_arg_init();

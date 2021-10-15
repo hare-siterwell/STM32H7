@@ -14,6 +14,7 @@ extern "C" {
 #include "bsp_app.h"
 
 void lcd_task(void *p_arg);
+void SPI_TransmitReceive(SPI_TypeDef *SPIx, u8 *TxData, u8 *RxData, u16 Size);
 
 #ifdef __cplusplus
 }
